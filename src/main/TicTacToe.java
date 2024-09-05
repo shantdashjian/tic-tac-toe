@@ -25,18 +25,22 @@ public class TicTacToe {
 		while (true) {
 			printBoard(board);
 			makeMove(board, currentPlayer, keyboardInput);
-			if (checkWin(board, currentPlayer.symbol())) {
+			if (playerWon(board, currentPlayer.symbol())) {
 				printBoard(board);
 				System.out.println(currentPlayer + " WINS!!!!!");
 				break;
 			}
-			if (isItATie(board)) {
+			if (itIsATie(board)) {
 				printBoard(board);
 				System.out.println("It's a tie!");
 				break;
 			}
-			currentPlayer = (currentPlayer == player1) ? player2 : player1;
+			currentPlayer = switchPlayer(player1, player2, currentPlayer);
 		}
+	}
+
+	private static Player switchPlayer(Player player1, Player player2, Player currentPlayer) {
+		return (currentPlayer == player1) ? player2 : player1;
 	}
 
 	private static char chooseSymbol(Scanner keyboardInput) {
@@ -77,7 +81,7 @@ public class TicTacToe {
 		}
 	}
 
-	public static boolean checkWin(char[][] board, char playerChar) {
+	public static boolean playerWon(char[][] board, char playerChar) {
 		// Check rows and columns
 		for (int i = 0; i < SIZE; i++) {
 			if ((board[i][0] == playerChar && board[i][1] == playerChar && board[i][2] == playerChar) ||
@@ -91,7 +95,7 @@ public class TicTacToe {
 			(board[0][2] == playerChar && board[1][1] == playerChar && board[2][0] == playerChar);
 	}
 
-	public static boolean isItATie(char[][] board) {
+	public static boolean itIsATie(char[][] board) {
 		for (int row = 0; row < SIZE; row++) {
 			for (int column = 0; column < SIZE; column++) {
 				if (board[row][column] == EMPTY) {
@@ -119,7 +123,7 @@ public class TicTacToe {
 				if (input >= min && input <= max) {
 					return input;
 				} else {
-					System.out.println("Input must be between " + min + " and " + max + ".");
+					System.out.println("Input must be between " + min + " and " + max + " inclusive.");
 				}
 			} else {
 				System.out.println("Invalid input. Please enter a number.");
