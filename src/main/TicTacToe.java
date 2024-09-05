@@ -25,7 +25,7 @@ public class TicTacToe {
 		while (true) {
 			printBoard(board);
 			makeMove(board, currentPlayer, keyboardInput);
-			if (playerWon(board, currentPlayer.symbol())) {
+			if (playerWon(board, currentPlayer)) {
 				printBoard(board);
 				System.out.println(currentPlayer + " WINS!!!!!");
 				break;
@@ -81,18 +81,18 @@ public class TicTacToe {
 		}
 	}
 
-	public static boolean playerWon(char[][] board, char playerChar) {
+	public static boolean playerWon(char[][] board, Player player) {
 		// Check rows and columns
 		for (int i = 0; i < SIZE; i++) {
-			if ((board[i][0] == playerChar && board[i][1] == playerChar && board[i][2] == playerChar) ||
-				(board[0][i] == playerChar && board[1][i] == playerChar && board[2][i] == playerChar)) {
+			if ((board[i][0] == player.symbol && board[i][1] == player.symbol && board[i][2] == player.symbol) ||
+				(board[0][i] == player.symbol && board[1][i] == player.symbol && board[2][i] == player.symbol)) {
 				return true;
 			}
 		}
 
 		// Check diagonals
-		return (board[0][0] == playerChar && board[1][1] == playerChar && board[2][2] == playerChar) ||
-			(board[0][2] == playerChar && board[1][1] == playerChar && board[2][0] == playerChar);
+		return (board[0][0] == player.symbol && board[1][1] == player.symbol && board[2][2] == player.symbol) ||
+			(board[0][2] == player.symbol && board[1][1] == player.symbol && board[2][0] == player.symbol);
 	}
 
 	public static boolean itIsATie(char[][] board) {
