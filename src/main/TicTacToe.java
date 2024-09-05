@@ -39,8 +39,12 @@ public class TicTacToe {
 		}
 	}
 
-	private static Player switchPlayer(Player player1, Player player2, Player currentPlayer) {
-		return (currentPlayer == player1) ? player2 : player1;
+	private static void resetBoard(char[][] board) {
+		for (int row = 0; row < SIZE; row++) {
+			for (int column = 0; column < SIZE; column++) {
+				board[row][column] = EMPTY;
+			}
+		}
 	}
 
 	private static char chooseSymbol(Scanner keyboardInput) {
@@ -54,11 +58,20 @@ public class TicTacToe {
 		}
 	}
 
+	private static void printBoard(char[][] board) {
+		for (int row = 0; row < SIZE; row++) {
+			for (int column = 0; column < SIZE; column++) {
+				System.out.print(board[row][column]);
+			}
+			System.out.println();
+		}
+	}
+
 	private static void makeMove(char[][] board, Player player, Scanner keyboardInput) {
 		System.out.println(player + "'s turn:");
 		while (true) {
-			int row = getValidIntInput(keyboardInput, "Which row (1-" + SIZE + ")? ", 1, SIZE) - 1;
-			int col = getValidIntInput(keyboardInput, "Which column (1-" + SIZE + ")? ", 1, SIZE) - 1;
+			int row = getValidIntInput(keyboardInput, "Which row (1-" + SIZE + ")? ") - 1;
+			int col = getValidIntInput(keyboardInput, "Which column (1-" + SIZE + ")? ") - 1;
 			if (board[row][col] == EMPTY) {
 				board[row][col] = player.symbol();
 				break;
@@ -67,17 +80,20 @@ public class TicTacToe {
 		}
 	}
 
-	private static boolean playAgain(Scanner keyboardInput) {
-		System.out.print("Play again (y/n)? ");
-		return keyboardInput.next().toLowerCase().startsWith("y");
-	}
-
-	private static void printBoard(char[][] board) {
-		for (int row = 0; row < SIZE; row++) {
-			for (int column = 0; column < SIZE; column++) {
-				System.out.print(board[row][column]);
+	private static int getValidIntInput(Scanner scanner, String prompt) {
+		while (true) {
+			System.out.print(prompt);
+			if (scanner.hasNextInt()) {
+				int input = scanner.nextInt();
+				if (input >= 1 && input <= SIZE) {
+					return input;
+				} else {
+					System.out.println("Input must be between " + 1 + " and " + SIZE + " inclusive.");
+				}
+			} else {
+				System.out.println("Invalid input. Please enter a number.");
+				scanner.next();
 			}
-			System.out.println();
 		}
 	}
 
@@ -100,24 +116,6 @@ public class TicTacToe {
 		return playerWonPrimaryDiagonal(board, player) || playerWonSecondaryDiagonal(board, player);
 	}
 
-	private static boolean playerWonSecondaryDiagonal(char[][] board, Player player) {
-		for (int i = 0; i < SIZE; i++) {
-			if (board[i][SIZE - i - 1] != player.symbol) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private static boolean playerWonPrimaryDiagonal(char[][] board, Player player) {
-		for (int i = 0; i < SIZE; i++) {
-			if (board[i][i] != player.symbol) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	private static boolean playerWonRow(Player player, char[][] board, int row) {
 		for (int column = 0; column < SIZE; column++) {
 			if (board[row][column] != player.symbol) {
@@ -136,6 +134,24 @@ public class TicTacToe {
 		return true;
 	}
 
+	private static boolean playerWonPrimaryDiagonal(char[][] board, Player player) {
+		for (int i = 0; i < SIZE; i++) {
+			if (board[i][i] != player.symbol) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean playerWonSecondaryDiagonal(char[][] board, Player player) {
+		for (int i = 0; i < SIZE; i++) {
+			if (board[i][SIZE - i - 1] != player.symbol) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private static boolean itIsATie(char[][] board) {
 		for (int row = 0; row < SIZE; row++) {
 			for (int column = 0; column < SIZE; column++) {
@@ -144,33 +160,16 @@ public class TicTacToe {
 				}
 			}
 		}
-
 		return true;
 	}
 
-	private static void resetBoard(char[][] board) {
-		for (int row = 0; row < SIZE; row++) {
-			for (int column = 0; column < SIZE; column++) {
-				board[row][column] = EMPTY;
-			}
-		}
+	private static Player switchPlayer(Player player1, Player player2, Player currentPlayer) {
+		return (currentPlayer == player1) ? player2 : player1;
 	}
 
-	private static int getValidIntInput(Scanner scanner, String prompt, int min, int max) {
-		while (true) {
-			System.out.print(prompt);
-			if (scanner.hasNextInt()) {
-				int input = scanner.nextInt();
-				if (input >= min && input <= max) {
-					return input;
-				} else {
-					System.out.println("Input must be between " + min + " and " + max + " inclusive.");
-				}
-			} else {
-				System.out.println("Invalid input. Please enter a number.");
-				scanner.next();
-			}
-		}
+	private static boolean playAgain(Scanner keyboardInput) {
+		System.out.print("Play again (y/n)? ");
+		return keyboardInput.next().toLowerCase().startsWith("y");
 	}
 
 	private record Player(int number, char symbol) {
