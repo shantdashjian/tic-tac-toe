@@ -72,7 +72,7 @@ public class TicTacToe {
 		return keyboardInput.next().toLowerCase().startsWith("y");
 	}
 
-	public static void printBoard(char[][] board) {
+	private static void printBoard(char[][] board) {
 		for (int row = 0; row < SIZE; row++) {
 			for (int column = 0; column < SIZE; column++) {
 				System.out.print(board[row][column]);
@@ -81,21 +81,41 @@ public class TicTacToe {
 		}
 	}
 
-	public static boolean playerWon(char[][] board, Player player) {
-		// Check rows and columns
-		for (int i = 0; i < SIZE; i++) {
-			if ((board[i][0] == player.symbol && board[i][1] == player.symbol && board[i][2] == player.symbol) ||
-				(board[0][i] == player.symbol && board[1][i] == player.symbol && board[2][i] == player.symbol)) {
+	private static boolean playerWon(char[][] board, Player player) {
+		// Check rows
+		for (int row = 0; row < SIZE; row++) {
+			if (playerWonRow(player, board, row)) {
+				return true;
+			}
+		}
+
+		// Check columns
+		for (int column = 0; column < SIZE; column++) {
+			if (playerWonColumn(player, board, column)) {
 				return true;
 			}
 		}
 
 		// Check diagonals
-		return (board[0][0] == player.symbol && board[1][1] == player.symbol && board[2][2] == player.symbol) ||
-			(board[0][2] == player.symbol && board[1][1] == player.symbol && board[2][0] == player.symbol);
+		return playerWonPrimaryDiagonal(board, player) || playerWonSecondaryDiagonal(board, player);
 	}
 
-	public static boolean itIsATie(char[][] board) {
+	private static boolean playerWonSecondaryDiagonal(char[][] board, Player player) {
+		return board[0][2] == player.symbol && board[1][1] == player.symbol && board[2][0] == player.symbol;
+	}
+
+	private static boolean playerWonPrimaryDiagonal(char[][] board, Player player) {
+		return board[0][0] == player.symbol && board[1][1] == player.symbol && board[2][2] == player.symbol;
+	}
+
+	private static boolean playerWonRow(Player player, char[][] board, int row) {
+		return board[row][0] == player.symbol && board[row][1] == player.symbol && board[row][2] == player.symbol;
+	}
+	private static boolean playerWonColumn(Player player, char[][] board, int column) {
+		return board[0][column] == player.symbol && board[1][column] == player.symbol && board[2][column] == player.symbol;
+	}
+
+	private static boolean itIsATie(char[][] board) {
 		for (int row = 0; row < SIZE; row++) {
 			for (int column = 0; column < SIZE; column++) {
 				if (board[row][column] == EMPTY) {
@@ -107,7 +127,7 @@ public class TicTacToe {
 		return true;
 	}
 
-	public static void resetBoard(char[][] board) {
+	private static void resetBoard(char[][] board) {
 		for (int row = 0; row < SIZE; row++) {
 			for (int column = 0; column < SIZE; column++) {
 				board[row][column] = EMPTY;
@@ -115,7 +135,7 @@ public class TicTacToe {
 		}
 	}
 
-	public static int getValidIntInput(Scanner scanner, String prompt, int min, int max) {
+	private static int getValidIntInput(Scanner scanner, String prompt, int min, int max) {
 		while (true) {
 			System.out.print(prompt);
 			if (scanner.hasNextInt()) {
