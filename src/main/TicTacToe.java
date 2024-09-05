@@ -101,18 +101,39 @@ public class TicTacToe {
 	}
 
 	private static boolean playerWonSecondaryDiagonal(char[][] board, Player player) {
-		return board[0][2] == player.symbol && board[1][1] == player.symbol && board[2][0] == player.symbol;
+		for (int i = 0; i < SIZE; i++) {
+			if (board[i][SIZE - i - 1] != player.symbol) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static boolean playerWonPrimaryDiagonal(char[][] board, Player player) {
-		return board[0][0] == player.symbol && board[1][1] == player.symbol && board[2][2] == player.symbol;
+		for (int i = 0; i < SIZE; i++) {
+			if (board[i][i] != player.symbol) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static boolean playerWonRow(Player player, char[][] board, int row) {
-		return board[row][0] == player.symbol && board[row][1] == player.symbol && board[row][2] == player.symbol;
+		for (int column = 0; column < SIZE; column++) {
+			if (board[row][column] != player.symbol) {
+				return false;
+			}
+		}
+		return true;
 	}
+
 	private static boolean playerWonColumn(Player player, char[][] board, int column) {
-		return board[0][column] == player.symbol && board[1][column] == player.symbol && board[2][column] == player.symbol;
+		for (int row = 0; row < SIZE; row++) {
+			if (board[row][column] != player.symbol) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static boolean itIsATie(char[][] board) {
